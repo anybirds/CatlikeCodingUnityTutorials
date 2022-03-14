@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static FunctionLibrary;
 
 public class Graph : MonoBehaviour
 {
@@ -10,19 +11,20 @@ public class Graph : MonoBehaviour
     [SerializeField, Range(10, 100)]
     int resolution;
 
+    [SerializeField]
+    FunctionEnum functionEnum;
+
     Transform[] points;
 
+    
     private void Awake()
     {
-        points = new Transform[resolution];
-        float step = 2f / resolution;
-        Vector3 position = Vector3.zero;
+        points = new Transform[resolution * resolution];
+        float step = 2.0f / resolution;
         Vector3 scale = Vector3.one * step;
         for (int i = 0; i < points.Length; i++)
         {
             Transform point = points[i] = Instantiate(pointPrefab);
-            position.x = (i + 0.5f) * step - 1f;
-            point.localPosition = position;
             point.localScale = scale;
             point.SetParent(transform, false);
         }
@@ -31,12 +33,19 @@ public class Graph : MonoBehaviour
     private void Update()
     {
         float time = Time.time;
-        for (int i = 0; i < points.Length; i++)
+        Function function = GetFunction(functionEnum);
+        float step = 2.0f / resolution;
+        int k = 0;
+        float u, v;
+        for (int i = 0; i < resolution; i++)
         {
-            Transform point = points[i];
-            Vector3 position = point.position;
-            position.y = Mathf.Sin(Mathf.PI * (position.x + time));
-            point.localPosition = position;
+            u = (i + 0.5f) * step - 1.0f;
+            for (int j = 0; j < resolution; j++)
+            {
+                v = (j + 0.5f) * step - 1.0f;
+                points[k].localPosition = function(u, v, time);
+                k++;
+            }
         }
     }
 }
