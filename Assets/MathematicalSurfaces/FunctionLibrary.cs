@@ -24,6 +24,26 @@ public static class FunctionLibrary
         return functions[(int)functionEnum];
     }
 
+    public static FunctionEnum GetNextFunctionEnum(FunctionEnum functionEnum)
+    {
+        return (int)functionEnum < functions.Length - 1 ? functionEnum + 1 : 0;
+    }
+
+    public static FunctionEnum GetRandomFunctionEnum()
+    {
+        return (FunctionEnum)Random.Range(0, functions.Length);
+    }
+
+    public static FunctionEnum GetRandomFunctionEnumOtherThan(FunctionEnum functionEnum)
+    {
+        var choice = (FunctionEnum)Random.Range(1, functions.Length);
+        return choice == functionEnum ? 0 : choice;
+    }
+
+    public static Vector3 Morph(float u, float v, float t, Function from, Function to, float progress)
+    {
+        return Vector3.LerpUnclamped(from(u, v, t), to(u, v, t), SmoothStep(0f, 1f, progress));
+    }
     public static Vector3 Wave(float u, float v, float t)
     {
         Vector3 p;
