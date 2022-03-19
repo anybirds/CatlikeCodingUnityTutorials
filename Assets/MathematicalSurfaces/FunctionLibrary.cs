@@ -7,7 +7,7 @@ public static class FunctionLibrary
 {
     public delegate Vector3 Function(float u, float v, float t);
 
-    private static Function[] functions = { Wave, MultiWave, Ripple, Sphere, Twist, Torus };
+    private static Function[] functions = { Wave, MultiWave, Ripple, Sphere, Torus };
 
     public enum FunctionEnum
     {
@@ -15,9 +15,10 @@ public static class FunctionLibrary
         MultiWave,
         Ripple,
         Sphere,
-        Band,
         Torus,
     }
+
+    public static int FunctionCount => functions.Length;
 
     public static Function GetFunction(FunctionEnum functionEnum)
     {
@@ -74,19 +75,8 @@ public static class FunctionLibrary
         p.z = v;
         return p;
     }
-    
-    public static Vector3 Sphere(float u, float v, float t)
-    {
-        float r = 0.5f + 0.5f * Sin(PI * t);
-        float s = r * Cos(0.5f * PI * v);
-        Vector3 p;
-        p.x = s * Cos(PI * u);
-        p.y = r * Sin(0.5f * PI * v);
-        p.z = s * Sin(PI * u);
-        return p;
-    }
 
-    public static Vector3 Twist(float u, float v, float t)
+    public static Vector3 Sphere(float u, float v, float t)
     {
         float r = 0.9f + 0.1f * Sin(PI * (6.0f * u + 4.0f * v + t));
         float s = r * Cos(0.5f * PI * v);
