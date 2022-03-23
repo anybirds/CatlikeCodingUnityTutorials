@@ -33,7 +33,7 @@ public class GPUGraph : MonoBehaviour
     FunctionEnum transitionFunctionEnum;
     ComputeBuffer positionsBuffer;
 
-    static int
+    static readonly int
         positionsId = Shader.PropertyToID("_Positions"),
         resolutionId = Shader.PropertyToID("_Resolution"),
         stepId = Shader.PropertyToID("_Step"),
@@ -51,7 +51,7 @@ public class GPUGraph : MonoBehaviour
         computeShader.SetBuffer(kernelIndex, positionsId, positionsBuffer);
         int groups = Mathf.CeilToInt(resolution / 8f);
         computeShader.Dispatch(kernelIndex, groups, groups, 1);
-        material.SetBuffer(positionsId, positionsBuffer);
+        // material.SetBuffer(positionsId, positionsBuffer);
         material.SetFloat(stepId, step);
         var bounds = new Bounds(Vector3.zero, Vector3.one * (2f + 2f * step));
         Graphics.DrawMeshInstancedProcedural(mesh, 0, material, bounds, resolution * resolution);
@@ -60,6 +60,7 @@ public class GPUGraph : MonoBehaviour
     private void OnEnable()
     {
         positionsBuffer = new ComputeBuffer(maxResolution * maxResolution, 3 * 4);
+        material.SetBuffer(positionsId, positionsBuffer);
     }
 
     private void OnDisable()
